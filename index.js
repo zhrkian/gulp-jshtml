@@ -30,6 +30,10 @@ function gulpJshtml(options) {
             var stream = String(file.contents),
                 location = "'" + file.path.replace(/\\/g, "/") + "'",
                 compiled = stream.replace(/(?:\r\n|\r|\n)/g, '').replace(/[\\']/g, "\"").replace(/[\\"']/g, '\\$&').replace(/\t/g, '').replace(/\s{2,}/g, ' ').trim();
+            if (options.removeLocalPath) {
+                location = location.split('/');
+                location = "'" + location[location.length - 1];
+            }
             compiled = options.invoke + "(" + location + ", \'" + compiled + "\');";
             file.contents = new Buffer(compiled);
             this.push(file);
